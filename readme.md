@@ -87,8 +87,6 @@ Full code
 
 If request gives the JsonObject then it will give the instance of  class you have passed itself.
 
-* For sample JSONObject "http://github.yubrajpoudel.com.np/others/sample2.json"*
-
     public void doGetMethodOfRestAPIForJSONObject() {
             Log.d("test", "started checking get test");
             // this is optional, mulitple header can be passed by keeping it in array
