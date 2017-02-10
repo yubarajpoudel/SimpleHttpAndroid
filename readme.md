@@ -12,7 +12,7 @@ If you are using ProGuard you might need to add the following option:
 
 **GET Request**
 =============
-=============
+
 >  
 
  
@@ -46,7 +46,7 @@ let create the sample model for example in this example i have created the *Prof
        
 > Note : Please put the empty constructor always in the model.
        
-**Response from server**
+**Response from server** "http://github.yubrajpoudel.com.np/others/sample1.json"
 
 ![enter image description here](https://github.com/yuviii/SimpleHttpAndroid/blob/master/response.png?raw=true)
     
@@ -116,7 +116,7 @@ So just use the object received from the Server straight away. Yeaahhhh !!!!
 
 **POST Request**
 ===========
-============
+
 *Can do the the post request by either passing the form data or through  by body with JSONObject*
 
 By passing the form-data
