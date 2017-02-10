@@ -15,4 +15,7 @@ public class Profile {
         this.address = jsonObject.optString("address");
         this.profession = jsonObject.optString("profession");
     }
+    public Profile(){
+        
+    }
 }

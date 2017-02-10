@@ -13,6 +13,8 @@ import com.mantraideas.simplehttp.datamanager.dmmodel.Response;
 
 import junit.framework.Assert;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -21,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // for the getRequest
-        doGetMethodOfRestAPI();
+        doGetMethodOfRestAPIForJSONArray();
+        doGetMethodOfRestAPIForJSONObject();
 
         //for the post request by passing the form data parameters
         doPostMethodOfRestAPIWithFormData();
@@ -93,20 +96,53 @@ public class MainActivity extends AppCompatActivity {
         requestManager.getData();
     }
 
-    public void doGetMethodOfRestAPI() {
-        final Response expected = Response.OK;
+    public void doGetMethodOfRestAPIForJSONArray() {
         Log.d("test", "started checking get test");
         // this is optional, mulitple header can be passed by keeping it in array
-        DataRequest request = DataRequest.getInstance().addHeaders(new String[]{"your_header_key"}, new String[]{"your_header_value"});
-        request.addUrl("https://www.yourdomain.com");
+        DataRequest request = DataRequest.getInstance();
+        // request.addHeaders(new String[]{"your_header_key"}, new String[]{"your_header_value"});
+        request.addUrl("http://github.yubrajpoudel.com.np/others/sample1.json");
         request.addMethod(Method.GET);
-        DataRequestManager<String> requestManager = DataRequestManager.getInstance(getApplicationContext(), String.class);
+        DataRequestManager<Profile> requestManager = DataRequestManager.getInstance(getApplicationContext(),
+                Profile.class);
         requestManager.addRequestBody(request).addOnDataReciveListner(new OnDataRecievedListener() {
             @Override
             public void onDataRecieved(Response response, Object object) {
-                Log.d("test", " data from server = " + object.toString());
-                Assert.assertEquals(response.getMessage(), expected, response.OK);
+                // since the json Array is recieved from the get Request this library gives the list of the class passed as parameter
+                // here Profile is passed hence the object will be the list of profile.
+                // if it is jsonobject it will give the pofile object
+                if (response == Response.OK) {
+                    List<Profile> profileList = (List<Profile>) object;
+                    Log.d("MainActivity", "list size = " + profileList.size());
+                } else {
+                    Log.d("MainActivity", "response = " + response.getMessage());
+                }
+            }
+        });
+        requestManager.getData();
+    }
 
+    public void doGetMethodOfRestAPIForJSONObject() {
+        Log.d("test", "started checking get test");
+        // this is optional, mulitple header can be passed by keeping it in array
+        DataRequest request = DataRequest.getInstance();
+        // request.addHeaders(new String[]{"your_header_key"}, new String[]{"your_header_value"});
+        request.addUrl("http://github.yubrajpoudel.com.np/others/sample2.json");
+        request.addMethod(Method.GET);
+        DataRequestManager<Profile> requestManager = DataRequestManager.getInstance(getApplicationContext(),
+                Profile.class);
+        requestManager.addRequestBody(request).addOnDataReciveListner(new OnDataRecievedListener() {
+            @Override
+            public void onDataRecieved(Response response, Object object) {
+                // since the json Array is recieved from the get Request this library gives the list of the class passed as parameter
+                // here Profile is passed hence the object will be the list of profile.
+                // if it is jsonobject it will give the pofile object
+                if (response == Response.OK) {
+                    Profile profile = (Profile)object;
+                    Log.d("MainActivity", "Profile name = " + profile.name + " address = " + profile.address + " profession = " + profile.profession);
+                } else {
+                    Log.d("MainActivity", "response = " + response.getMessage());
+                }
             }
         });
         requestManager.getData();
