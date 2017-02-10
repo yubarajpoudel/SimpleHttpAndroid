@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
     public void doGetMethodOfRestAPI() {
         final Response expected = Response.OK;
         Log.d("test", "started checking get test");
-        // mulitple header can be passed by keeping it in array
+        // this is optional, mulitple header can be passed by keeping it in array
         DataRequest request = DataRequest.getInstance().addHeaders(new String[]{"your_header_key"}, new String[]{"your_header_value"});
         request.addUrl("https://www.yourdomain.com");
         request.addMethod(Method.GET);
