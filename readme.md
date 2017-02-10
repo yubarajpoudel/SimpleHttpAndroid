@@ -10,7 +10,9 @@ If you are using ProGuard you might need to add the following option:
 > -dontwarn com.mantraideas.simplehttp.datamanager.** 
 
 
-**GET Request** 
+**GET Request**
+=============
+=============
 >  
 
  
@@ -45,6 +47,7 @@ let create the sample model for example in this example i have created the *Prof
 > Note : Please put the empty constructor always in the model.
        
 **Response from server**
+
 ![enter image description here](https://github.com/yuviii/SimpleHttpAndroid/blob/master/response.png?raw=true)
     
 *Since the response from server is JSONArray this will itself gives the List of objects of the type that passed as the parameter in the DataRequestManager in OnDataRecievedListener Callback
@@ -111,7 +114,9 @@ If request gives the JsonObject then it will give the instance of  class you hav
 
 So just use the object received from the Server straight away. Yeaahhhh !!!!
 
-**POST Request** 
+**POST Request**
+===========
+============
 *Can do the the post request by either passing the form data or through  by body with JSONObject*
 
 By passing the form-data
