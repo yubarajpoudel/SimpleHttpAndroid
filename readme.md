@@ -5,6 +5,20 @@ SimpleHttpAndroid
 
 A Simpe HTTP client for android and the Java Application.
 
+Maven
+
+
+    <dependency>
+      <groupId>com.mantraideas.simplehttp</groupId>
+      <artifactId>simplehttp</artifactId>
+      <version>1.0.0</version>
+      <type>pom</type>
+    </dependency>
+
+Gradle
+
+    compile 'com.mantraideas.simplehttp:simplehttp:1.0.0'
+
 **ProGuard**
 
 If you are using ProGuard you might need to add the following option:
