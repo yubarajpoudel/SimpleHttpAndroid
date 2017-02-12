@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.mantraideas.simplehttp.datamanager.dmmodel.DataRequest;
 import com.mantraideas.simplehttp.datamanager.dmmodel.Method;
@@ -115,10 +114,10 @@ public class DataRequestManager<T extends Object> {
             try {
                 Object json = new JSONTokener(string).nextValue();
                 boolean success = json instanceof JSONArray || json instanceof JSONObject;
-                Log.d("DataRequestManager", "request Successed = " + success);
+                DmUtilities.trace("DataRequestManager, request Successed = " + success);
                 if (success) {
                     if (clazzz instanceof String) {
-                        Log.d("DataRequestManager", "is String true");
+                        DmUtilities.trace("DataRequestManager, is String true");
                         exitFromDataManager(Response.OK, string);
                     } else if (json instanceof JSONObject) {
                         Constructor<?> constructor = clazzz.getClass().getConstructor(JSONObject.class);
@@ -159,7 +158,7 @@ public class DataRequestManager<T extends Object> {
 
     private void setLastServerCallTime() {
         String key = clazzz.getClass().getSimpleName();
-        Log.d("DataRequestmanager", " serverCall time saved in key = " + key);
+        DmUtilities.trace("DataRequestmanager,  serverCall time saved in key = " + key);
         preference.edit().putLong(clazzz.getClass().getSimpleName(), System.currentTimeMillis()).commit();
     }
 

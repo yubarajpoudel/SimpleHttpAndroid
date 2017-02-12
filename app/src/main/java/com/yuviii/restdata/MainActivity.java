@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         // for the post request by passing the jsonobject in post body
         doPostMethodOfRestApiWithJSONBody();
 
+
     }
 
     public void doPostMethodOfRestApiWithJSONBody() {
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                 // here Profile is passed hence the object will be the list of profile.
                 // if it is jsonobject it will give the pofile object
                 if (response == Response.OK) {
-                    Profile profile = (Profile)object;
+                    Profile profile = (Profile) object;
                     Log.d("MainActivity", "Profile name = " + profile.name + " address = " + profile.address + " profession = " + profile.profession);
                 } else {
                     Log.d("MainActivity", "response = " + response.getMessage());
@@ -147,4 +148,6 @@ public class MainActivity extends AppCompatActivity {
         });
         requestManager.getData();
     }
+
+
 }

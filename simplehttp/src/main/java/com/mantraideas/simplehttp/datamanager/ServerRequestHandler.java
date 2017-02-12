@@ -1,7 +1,6 @@
 package com.mantraideas.simplehttp.datamanager;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.mantraideas.simplehttp.datamanager.dmmodel.DataRequest;
 import com.mantraideas.simplehttp.datamanager.error.DataManagerException;
@@ -25,7 +24,7 @@ public class ServerRequestHandler {
                 if (request.hasValidHeaders()) {
                     addHeaderifExists(request);
                 } else {
-                    Log.d("ServerRequestHandler", "Headers is either empty or not valid");
+                    DmUtilities.trace("ServerRequestHandler, Headers is either empty or not valid");
                 }
             } else {
                 throw new DataManagerException("Url cannot be null");
@@ -56,6 +55,7 @@ public class ServerRequestHandler {
             conn.setDoOutput(true);
             conn.setDoInput(true);
             OutputStream writer = conn.getOutputStream();
+            DmUtilities.trace("ServerRequestHandler, encoded = " + new String(request.getDataRequestPair().toUrlEncodedData()));
             writer.write(request.getDataRequestPair().toUrlEncodedData());
             writer.flush();
             writer.close();

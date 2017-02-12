@@ -2,8 +2,6 @@ package com.mantraideas.simplehttp.datamanager.util;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.support.compat.BuildConfig;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,11 +14,15 @@ import java.security.MessageDigest;
  */
 
 public class DmUtilities {
+
+    public static boolean DEBUG = false;
+
     public static void trace(String message){
-        if(BuildConfig.DEBUG) {
+        if(DEBUG) {
             System.out.println(message);
         }
     }
+
     public static String getSha1Hex(String string) {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
@@ -30,7 +32,7 @@ public class DmUtilities {
             for (byte b : bytes) {
                 buffer.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
             }
-            Log.d("SHA-1", "params = " + string + " signature = " + buffer.toString());
+            DmUtilities.trace("SHA-1, params = " + string + " signature = " + buffer.toString());
             return buffer.toString();
         } catch (Exception ignored) {
             ignored.printStackTrace();

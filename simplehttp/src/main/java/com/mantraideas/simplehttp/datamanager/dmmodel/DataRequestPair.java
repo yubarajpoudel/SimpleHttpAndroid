@@ -1,6 +1,5 @@
 package com.mantraideas.simplehttp.datamanager.dmmodel;
 
-import android.util.Log;
 
 import com.mantraideas.simplehttp.datamanager.error.DataManagerException;
 import com.mantraideas.simplehttp.datamanager.util.DmUtilities;
@@ -63,7 +62,7 @@ public class DataRequestPair {
         } catch (DataManagerException e) {
             e.printStackTrace();
         }
-        Log.d("DataRequestPair", "value = " + builder.toString());
+        DmUtilities.trace("DataRequestPair, value = " + builder.toString());
         return builder.toString();
     }
 
@@ -79,16 +78,17 @@ public class DataRequestPair {
 
             StringBuilder result = new StringBuilder();
             boolean first = true;
-            for (DataRequestPair data : list) {
                 try {
-                    if (first) {
-                        first = false;
-                    } else {
-                        result.append("&");
+                    for (DataRequestPair data : list) {
+                        if (first) {
+                            first = false;
+                        } else {
+                            result.append("&");
+                        }
+                        result.append(URLEncoder.encode(data.key, "UTF-8"));
+                        result.append("=");
+                        result.append(URLEncoder.encode(data.value, "UTF-8"));
                     }
-                    result.append(URLEncoder.encode(data.key, "UTF-8"));
-                    result.append("=");
-                    result.append(URLEncoder.encode(data.value, "UTF-8"));
                     byte[] bytes = result.toString().getBytes();
                     return bytes;
                 } catch (DataManagerException dmException) {
@@ -97,7 +97,6 @@ public class DataRequestPair {
                     e.printStackTrace();
                 }
             }
-        }
         return new byte[0];
     }
 }
