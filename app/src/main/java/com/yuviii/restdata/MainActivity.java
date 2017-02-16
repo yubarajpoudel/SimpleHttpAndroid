@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.mantraideas.simplehttp.datamanager.DataRequestManager;
 import com.mantraideas.simplehttp.datamanager.OnDataRecievedListener;
+import com.mantraideas.simplehttp.datamanager.OnDataRecievedProgressListener;
 import com.mantraideas.simplehttp.datamanager.dmmodel.DataRequest;
 import com.mantraideas.simplehttp.datamanager.dmmodel.DataRequestPair;
 import com.mantraideas.simplehttp.datamanager.dmmodel.Method;
@@ -22,17 +23,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // for the getRequest
+        // Currently supports GET, POST, PUT, DELETE method
+
+//         for the getRequest
         doGetMethodOfRestAPIForJSONArray();
         doGetMethodOfRestAPIForJSONObject();
-
-        //for the post request by passing the form data parameters
+//
+//        //for the post request by passing the form data parameters
         doPostMethodOfRestAPIWithFormData();
 
         // for the post request by passing the jsonobject in post body
         doPostMethodOfRestApiWithJSONBody();
 
-
+        // for delete method
+        testDELETEMethod();
     }
 
     public void doPostMethodOfRestApiWithJSONBody() {
@@ -65,11 +69,16 @@ public class MainActivity extends AppCompatActivity {
         request.addDataRequestPair(requestPair);
         request.addMethod(Method.POST);
         DataRequestManager<String> requestManager = DataRequestManager.getInstance(getApplicationContext(), String.class);
-        requestManager.addRequestBody(request).addOnDataReciveListner(new OnDataRecievedListener() {
+        requestManager.addRequestBody(request).addOnDataRecieveListner(new OnDataRecievedListener() {
             @Override
             public void onDataRecieved(Response response, Object object) {
                 Log.d("test", " data from server = " + object.toString());
                 Assert.assertEquals(response.getMessage(), expected, response);
+            }
+        }, new OnDataRecievedProgressListener() {
+            @Override
+            public void onDataRecievedProgress(int completedPercentage) {
+                Log.d("MainActivity", "Progress = " + completedPercentage);
             }
         });
         requestManager.getData();
@@ -77,21 +86,47 @@ public class MainActivity extends AppCompatActivity {
 
     public void doPostMethodOfRestAPIWithFormData() {
         final Response expected = Response.OK;
+
         DataRequestPair requestPair = DataRequestPair.create();
         requestPair.put("password", "12345");
         requestPair.put("email", "test@tests.com");
 
+
         // mulitple header can be passed by keeping it in array
-        DataRequest request = DataRequest.getInstance().addHeaders(new String[]{"your_header_key"}, new String[]{"your_header_value"});
-        request.addUrl("https://www.yourdomain.com/api/rest/login");
+        DataRequest request = DataRequest.getInstance();
+//        request.addHeaders(new String[]{"your_header_key"}, new String[]{"your_header_value"});
+        request.addHeaders(new String[]{"X-APP-PKG"}, new String[]{"com.np.lokbhaka"});
+//        request.addUrl("https://www.yourdomain.com/api/rest/login");
+        request.addUrl("http://yourdomain.com");
         request.addDataRequestPair(requestPair);
         request.addMethod(Method.POST);
         DataRequestManager<String> requestManager = DataRequestManager.getInstance(getApplicationContext(), String.class);
-        requestManager.addRequestBody(request).addOnDataReciveListner(new OnDataRecievedListener() {
+        requestManager.addRequestBody(request).addOnDataRecieveListner(new OnDataRecievedListener() {
             @Override
             public void onDataRecieved(Response response, Object object) {
                 Log.d("test", " data from server = " + object.toString());
                 Assert.assertEquals(response.getMessage(), expected, response);
+            }
+        }, new OnDataRecievedProgressListener() {
+            @Override
+            public void onDataRecievedProgress(int completedPercentage) {
+                Log.d("MainActivity", "Progress = " + completedPercentage);
+            }
+        });
+        requestManager.getData();
+    }
+
+    public void testDELETEMethod(){
+        DataRequest request = DataRequest.getInstance();
+        request.addUrl("https://www.yourdomain.com");
+        // headers are optional
+        request.addHeaders(new String[]{"headerKey"}, new String[]{"heade value"});
+        request.addMethod(Method.DELETE);
+        DataRequestManager<String> requestManager = DataRequestManager.getInstance(getApplicationContext(), String.class);
+        requestManager.addRequestBody(request).addOnDataRecieveListner(new OnDataRecievedListener() {
+            @Override
+            public void onDataRecieved(Response response, Object object) {
+                Log.d("MainActivity", "Response = " + response.getMessage() + " , data From Server = " + object.toString());
             }
         });
         requestManager.getData();
@@ -99,25 +134,31 @@ public class MainActivity extends AppCompatActivity {
 
     public void doGetMethodOfRestAPIForJSONArray() {
         Log.d("test", "started checking get test");
-        // this is optional, mulitple header can be passed by keeping it in array
         DataRequest request = DataRequest.getInstance();
+        // this is optional, mulitple header can be passed by keeping it in array
         // request.addHeaders(new String[]{"your_header_key"}, new String[]{"your_header_value"});
         request.addUrl("http://github.yubrajpoudel.com.np/others/sample1.json");
         request.addMethod(Method.GET);
         DataRequestManager<Profile> requestManager = DataRequestManager.getInstance(getApplicationContext(),
-                Profile.class);
-        requestManager.addRequestBody(request).addOnDataReciveListner(new OnDataRecievedListener() {
+                String.class);
+        requestManager.addRequestBody(request).addOnDataRecieveListner(new OnDataRecievedListener() {
             @Override
             public void onDataRecieved(Response response, Object object) {
                 // since the json Array is recieved from the get Request this library gives the list of the class passed as parameter
                 // here Profile is passed hence the object will be the list of profile.
                 // if it is jsonobject it will give the pofile object
                 if (response == Response.OK) {
+                    Log.d("MainActivity", "data = " + object.toString());
                     List<Profile> profileList = (List<Profile>) object;
                     Log.d("MainActivity", "list size = " + profileList.size());
                 } else {
                     Log.d("MainActivity", "response = " + response.getMessage());
                 }
+            }
+        }, new OnDataRecievedProgressListener() {
+            @Override
+            public void onDataRecievedProgress(int completedPercentage) {
+                Log.d("MainActivity", " progress = " + completedPercentage);
             }
         });
         requestManager.getData();
@@ -132,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
         request.addMethod(Method.GET);
         DataRequestManager<Profile> requestManager = DataRequestManager.getInstance(getApplicationContext(),
                 Profile.class);
-        requestManager.addRequestBody(request).addOnDataReciveListner(new OnDataRecievedListener() {
+        requestManager.addRequestBody(request).addOnDataRecieveListner(new OnDataRecievedListener() {
             @Override
             public void onDataRecieved(Response response, Object object) {
                 // since the json Array is recieved from the get Request this library gives the list of the class passed as parameter

@@ -5,5 +5,15 @@ package com.mantraideas.simplehttp.datamanager.dmmodel;
  */
 
 public enum Method {
-    GET, POST
+    GET ("GET"), POST("POST"), PUT("PUT"), DELETE("DELETE");
+
+    String mMethod = "GET";
+
+    Method(String mMethod){
+        this.mMethod = mMethod;
+    }
+
+    public String getMethod(){
+        return this.mMethod;
+    }
 }

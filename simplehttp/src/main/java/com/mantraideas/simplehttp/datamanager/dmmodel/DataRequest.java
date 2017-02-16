@@ -7,7 +7,7 @@ package com.mantraideas.simplehttp.datamanager.dmmodel;
 public class DataRequest {
     private String url = "";
     private DataRequestPair dataRequestPair = null;
-    private Method method;
+    private Method method = null;
     private long minimumServerCallTime = 0;
     private boolean force = false;
     private boolean saveForOffline = false;
@@ -36,6 +36,10 @@ public class DataRequest {
     public boolean isSaveForOffline() {
         return saveForOffline;
     }
+
+    private DataRequest() {
+    }
+
 
     public static DataRequest getInstance() {
         return new DataRequest();

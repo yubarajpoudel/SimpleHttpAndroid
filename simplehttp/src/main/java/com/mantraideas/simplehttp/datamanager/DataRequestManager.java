@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.mantraideas.simplehttp.datamanager.dmmodel.DataRequest;
 import com.mantraideas.simplehttp.datamanager.dmmodel.Method;
@@ -32,7 +33,8 @@ public class DataRequestManager<T extends Object> {
     private ServerRequestHandler serverRequestHandler;
     private DataRequest request;
     private SharedPreferences preference;
-    private OnDataRecievedListener listener;
+    private OnDataRecievedListener recivedListener;
+    private OnDataRecievedProgressListener progressListener;
     T clazzz;
 
     private DataRequestManager(Context context, Class<?> mClass) {
@@ -49,8 +51,17 @@ public class DataRequestManager<T extends Object> {
         preference = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public void addOnDataReciveListner(OnDataRecievedListener listener) {
-        this.listener = listener;
+    public void addOnDataRecieveListner(OnDataRecievedListener listener) {
+        this.recivedListener = listener;
+    }
+
+    public void addOnDataRecieveListner(OnDataRecievedProgressListener listener) {
+        this.progressListener = listener;
+    }
+
+    public void addOnDataRecieveListner(OnDataRecievedListener recivedListener, OnDataRecievedProgressListener progressListener) {
+        this.recivedListener = recivedListener;
+        this.progressListener = progressListener;
     }
 
     public static DataRequestManager getInstance(Context context, Class<?> mClass) {
@@ -76,8 +87,8 @@ public class DataRequestManager<T extends Object> {
     }
 
     private void exitFromDataManager(Response response, Object object) {
-        if (listener != null) {
-            listener.onDataRecieved(response, object);
+        if (recivedListener != null) {
+            recivedListener.onDataRecieved(response, object);
         }
     }
 
@@ -95,16 +106,21 @@ public class DataRequestManager<T extends Object> {
         return Response.OK;
     }
 
-    class mAsync extends AsyncTask<Void, Void, String> {
+    class mAsync extends AsyncTask<Void, Integer, String> {
+
         @Override
         protected String doInBackground(Void... voids) {
-            serverRequestHandler = new ServerRequestHandler(request);
-            if (request.getMethod() == Method.POST) {
-                return serverRequestHandler.httpPostData();
-            } else if (request.getMethod() == Method.GET) {
+            serverRequestHandler = new ServerRequestHandler(request, progressListener);
+            if(request.getMethod() == null){
+                throw new DataManagerException("Please provide the valid method for eg GET, POST, PUT or DELETE");
+            }
+            else if (request.getMethod() == Method.GET) {
                 return serverRequestHandler.httpGetData();
             } else {
-                throw new DataManagerException("request method is null, addthe method in DataRequest");
+                if(progressListener != null){
+                    Log.i("SimpleHttp", "Currently OnDataRecieved Progress listener is available only in the GET request method. for more queries please contact to author");
+                }
+                return serverRequestHandler.httpPerformOperation(request.getMethod());
             }
         }
 
@@ -154,6 +170,7 @@ public class DataRequestManager<T extends Object> {
                 exitFromDataManager(Response.ERROR, string);
             }
         }
+
     }
 
     private void setLastServerCallTime() {
