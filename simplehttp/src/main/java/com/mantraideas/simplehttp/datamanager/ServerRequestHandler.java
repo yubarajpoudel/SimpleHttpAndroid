@@ -117,7 +117,7 @@ public class ServerRequestHandler {
             conn.setDoOutput(true);
             conn.setDoInput(true);
             OutputStream writer = conn.getOutputStream();
-            DmUtilities.trace("ServerRequestHandler, ConnectionStatus = " + conn.getResponseCode() + " Contains DataRequestPair = " + (request.getDataRequestPair() != null) + " byteLength = " + request.getDataRequestPair().toUrlEncodedData().length);
+            DmUtilities.trace("ServerRequestHandler, ConnectionStatus = " + conn.getResponseCode() + " Contains DataRequestPair = " + (request.getDataRequestPair() != null));
             writer.write(request.getDataRequestPair() != null ? request.getDataRequestPair().toUrlEncodedData() : new byte[0]);
             outputStreamWriter = new DataOutputStream(conn.getOutputStream());
             outputStreamWriter.write(request.getDataRequestPair() != null ? request.getDataRequestPair().toUrlEncodedData() : new byte[0]);
