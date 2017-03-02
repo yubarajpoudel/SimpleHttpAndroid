@@ -29,6 +29,10 @@ public class TestActivity extends AppCompatActivity {
         testDeleteMethod();
     }
 
+    private void testGETMethod(){
+
+    }
+
     private void testPostMethod() {
         final Response expected = Response.OK;
         String samplebody = "{\n" +
