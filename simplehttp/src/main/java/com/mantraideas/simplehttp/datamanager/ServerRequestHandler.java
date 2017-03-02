@@ -8,8 +8,11 @@ import com.mantraideas.simplehttp.datamanager.error.DataManagerException;
 import com.mantraideas.simplehttp.datamanager.util.DmUtilities;
 
 import java.io.BufferedInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -41,7 +44,7 @@ public class ServerRequestHandler {
         }
     }
 
-    public String httpGetData() {
+    public String get() {
         String responseFromServer = "";
         try {
             conn.setRequestMethod("GET");
@@ -69,26 +72,78 @@ public class ServerRequestHandler {
         } catch (Exception e) {
             e.printStackTrace();
             throw new DataManagerException("error occured in connection");
+        }finally {
+            conn.disconnect();
         }
         return responseFromServer;
     }
 
 
-    public String httpPerformOperation(Method method) {
+    public String post() {
         String responseFromServer = "";
         try {
-            conn.setRequestMethod(method.getMethod());
+            conn.setRequestMethod("POST");
             conn.setRequestProperty("Accept-Encoding", "identity");
             conn.setDoOutput(true);
             conn.setDoInput(true);
             OutputStream writer = conn.getOutputStream();
-            DmUtilities.trace("ServerRequestHandler, Contains DataRequestPair = " + (request.getDataRequestPair() != null));
+            DmUtilities.trace("ServerRequestHandler, ConnectionStatus = " + conn.getResponseCode() + " Contains DataRequestPair = " + (request.getDataRequestPair() != null) + " byteLength = " + request.getDataRequestPair().toUrlEncodedData().length);
             writer.write(request.getDataRequestPair() != null ? request.getDataRequestPair().toUrlEncodedData() : new byte[0]);
             writer.flush();
             writer.close();
             responseFromServer = DmUtilities.convertStreamToString(conn.getInputStream());
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        return responseFromServer;
+    }
+
+    public String delete(){
+        String responseFromServer = "";
+        try {
+            conn.setRequestMethod("DELETE");
+            conn.setRequestProperty("Accept-Encoding", "identity");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            OutputStream writer = conn.getOutputStream();
+            DmUtilities.trace("ServerRequestHandler, ConnectionStatus = " + conn.getResponseCode() + " Contains DataRequestPair = " + (request.getDataRequestPair() != null) + " byteLength = " + request.getDataRequestPair().toUrlEncodedData().length);
+            writer.write(request.getDataRequestPair() != null ? request.getDataRequestPair().toUrlEncodedData() : new byte[0]);
+            writer.flush();
+            writer.close();
+            responseFromServer = DmUtilities.convertStreamToString(conn.getInputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return responseFromServer;
+    }
+
+
+    public String put(){
+        DataOutputStream outputStreamWriter = null;
+        String responseFromServer = "";
+        try {
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            conn.setRequestMethod("PUT");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            outputStreamWriter = new DataOutputStream(conn.getOutputStream());
+            outputStreamWriter.write(request.getDataRequestPair() != null ? request.getDataRequestPair().toUrlEncodedData() : new byte[0]);
+            responseFromServer = DmUtilities.convertStreamToString(conn.getInputStream());
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }  finally {
+            if (outputStreamWriter != null) {
+                try {
+                    outputStreamWriter.flush();
+                    outputStreamWriter.close();
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
+            }
+            if (conn != null) {
+                conn.disconnect();
+            }
         }
         return responseFromServer;
     }

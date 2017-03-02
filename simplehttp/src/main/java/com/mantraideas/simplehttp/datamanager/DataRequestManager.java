@@ -114,13 +114,23 @@ public class DataRequestManager<T extends Object> {
             if(request.getMethod() == null){
                 throw new DataManagerException("Please provide the valid method for eg GET, POST, PUT or DELETE");
             }
-            else if (request.getMethod() == Method.GET) {
-                return serverRequestHandler.httpGetData();
-            } else {
-                if(progressListener != null){
-                    Log.i("SimpleHttp", "Currently OnDataRecieved Progress listener is available only in the GET request method. for more queries please contact to author");
-                }
-                return serverRequestHandler.httpPerformOperation(request.getMethod());
+            if(!request.getMethod().equals("GET") && progressListener != null){
+                Log.d("SimpleHttp", "Currently OnDataRecieved Progress listener is available only in the GET request method. for more queries please contact to author");
+            }
+            if (request.getMethod() == Method.GET) {
+                return serverRequestHandler.get();
+            }
+            else if(request.getMethod() == Method.PUT) {
+                return serverRequestHandler.put();
+            }
+            else if(request.getMethod() == Method.POST){
+                return serverRequestHandler.post();
+            }
+            else if(request.getMethod() == Method.DELETE) {
+                return serverRequestHandler.delete();
+            }
+            else {
+                return "{}";
             }
         }
 

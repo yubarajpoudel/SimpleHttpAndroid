@@ -15,7 +15,7 @@ import java.security.MessageDigest;
 
 public class DmUtilities {
 
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
 
     public static void trace(String message){
         if(DEBUG) {
