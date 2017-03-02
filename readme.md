@@ -11,158 +11,33 @@ Maven
     <dependency>
       <groupId>com.mantraideas.simplehttp</groupId>
       <artifactId>simplehttp</artifactId>
-      <version>1.0.2</version>
+      <version>1.0.6</version>
       <type>pom</type>
     </dependency>
 
 Gradle
 
-    compile 'com.mantraideas.simplehttp:simplehttp:1.0.2'
+    compile 'com.mantraideas.simplehttp:simplehttp:1.0.6'
 
 **ProGuard**
 
 If you are using ProGuard you might need to add the following option:
-> -dontwarn com.mantraideas.simplehttp.datamanager.** 
+> -dontwarn com.mantraideas.simplehttp.datamanager.**
 
+**Support**
+> Currently it supports the GET, POST, PUT and DELETE request method
 
-**GET Request**
-=============
+**Making the Request**
+> Passing the form data in the body
 
->  
-
- 
-
-     DataRequest request = DataRequest.getInstance().addHeaders(new String[]{"your_header_key"}, new String[]{"your_header_value"});
-        request.addUrl("https://www.yourdomain.com");
-        request.addMethod(Method.GET);
-        DataRequestManager<String> requestManager = DataRequestManager.getInstance(getApplicationContext(), String.class);
-        requestManager.addRequestBody(request).addOnDataReciveListner(new OnDataRecievedListener() {
-            @Override
-            public void onDataRecieved(Response response, Object object) {
-                Log.d("test", " data from server = " + object.toString());
-            }
-        });
-        requestManager.getData();
-**To get the data in either List or Object**
-let create the sample model for example in this example i have created the *Profile.java*
-> 
-
-    // Sample class
-        public class Profile {
-            public String name, address, profession;
-              public Profile(JSONObject jsonObject) {
-                this.name = jsonObject.optString("name");
-                this.address = jsonObject.optString("address");
-                this.profession = jsonObject.optString("profession");
-                }
-            public Profile(){   
-            }
-        }
-       
-> Note : Please put the empty constructor always in the model.
-       
-**Response from server** "http://github.yubrajpoudel.com.np/others/sample1.json"
-
-![enter image description here](https://github.com/yuviii/SimpleHttpAndroid/blob/master/response.png?raw=true)
-    
-*Since the response from server is JSONArray this will itself gives the List of objects of the type that passed as the parameter in the DataRequestManager in OnDataRecievedListener Callback
-
->  for example, to get list of profile class  
-
-    DataRequestManager<Profile> requestManager = DataRequestManager.getInstance(getApplicationContext(),Profile.class);
-
-Full code
-
-     public void doGetMethodOfRestAPIForJSONArray() {
-            Log.d("test", "started checking get test");
-            // this is optional, mulitple header can be passed by keeping it in array
-            DataRequest request = DataRequest.getInstance();
-            // request.addHeaders(new String[]{"your_header_key"}, new String[]{"your_header_value"});
-            request.addUrl("http://github.yubrajpoudel.com.np/others/sample1.json");
-            request.addMethod(Method.GET);
-            DataRequestManager<Profile> requestManager = DataRequestManager.getInstance(getApplicationContext(),
-                    Profile.class);
-            requestManager.addRequestBody(request).addOnDataReciveListner(new OnDataRecievedListener() {
-                @Override
-                public void onDataRecieved(Response response, Object object) {
-                    // since the json Array is recieved from the get Request this library gives the list of the class passed as parameter
-                    // here Profile is passed hence the object will be the list of profile.
-                    // if it is jsonobject it will give the pofile object
-                    if (response == Response.OK) {
-                        List<Profile> profileList = (List<Profile>) object;
-                        Log.d("MainActivity", "list size = " + profileList.size());
-                    } else {
-                        Log.d("MainActivity", "response = " + response.getMessage());
-                    }
-                }
-            });
-            requestManager.getData();
-        }
-
-If request gives the JsonObject then it will give the instance of  class you have passed itself.
-
-    public void doGetMethodOfRestAPIForJSONObject() {
-            Log.d("test", "started checking get test");
-            // this is optional, mulitple header can be passed by keeping it in array
-            DataRequest request = DataRequest.getInstance();
-            // request.addHeaders(new String[]{"your_header_key"}, new String[]{"your_header_value"});
-            request.addUrl("http://github.yubrajpoudel.com.np/others/sample2.json");
-            request.addMethod(Method.GET);
-            DataRequestManager<Profile> requestManager = DataRequestManager.getInstance(getApplicationContext(),
-                    Profile.class);
-            requestManager.addRequestBody(request).addOnDataReciveListner(new OnDataRecievedListener() {
-                @Override
-                public void onDataRecieved(Response response, Object object) {
-                    // since the json Array is recieved from the get Request this library gives the list of the class passed as parameter
-                    // here Profile is passed hence the object will be the list of profile.
-                    // if it is jsonobject it will give the pofile object
-                    if (response == Response.OK) {
-                        Profile profile = (Profile)object;
-                        Log.d("MainActivity", "Profile name = " + profile.name + " address = " + profile.address + " profession = " + profile.profession);
-                    } else {
-                        Log.d("MainActivity", "response = " + response.getMessage());
-                    }
-                }
-            });
-            requestManager.getData();
-        }
-
-So just use the object received from the Server straight away. Yeaahhhh !!!!
-
-**POST Request**
-===========
-
-*Can do the the post request by either passing the form data or through  by body with JSONObject*
-
-By passing the form-data
-
-     public void doPostMethodOfRestAPIWithFormData() {
-            final Response expected = Response.OK;
-            DataRequestPair requestPair = DataRequestPair.create();
+    DataRequestPair requestPair = DataRequestPair.create();
             requestPair.put("password", "12345");
             requestPair.put("email", "test@tests.com");
-    
-            // mulitple header can be passed by keeping it in array
-            DataRequest request = DataRequest.getInstance().addHeaders(new String[]{"your_header_key"}, new String[]{"your_header_value"});
-            request.addUrl("https://www.yourdomain.com/api/rest/login");
-            request.addDataRequestPair(requestPair);
-            request.addMethod(Method.POST);
-            DataRequestManager<String> requestManager = DataRequestManager.getInstance(getApplicationContext(), String.class);
-            requestManager.addRequestBody(request).addOnDataReciveListner(new OnDataRecievedListener() {
-                @Override
-                public void onDataRecieved(Response response, Object object) {
-                    Log.d("test", " data from server = " + object.toString());
-                    Assert.assertEquals(response.getMessage(), expected, response);
-                }
-            });
-            requestManager.getData();
-        }
 
-Or by passing JsonObject in the body 
 
-     public void doPostMethodOfRestApiWithJSONBody() {
-            final Response expected = Response.OK;
-            String samplebody = "{\n" +
+> Passing the JSONObject in the body
+
+     String sampleJSONbody = "{\n" +
                     "\t\"address_1\": \"Test street 88\",\n" +
                     "\t\"address_2\": \"test\",\n" +
                     "\t\"city\": \"Berlin\",\n" +
@@ -181,24 +56,120 @@ Or by passing JsonObject in the body
                     "\t\"confirm\": \"12345\",\n" +
                     "\t\"agree\": \"1\"\n" +
                     "}";
-            DataRequestPair requestPair = DataRequestPair.create(samplebody);
-            DataRequest request = DataRequest.getInstance()
+            DataRequestPair requestPair = DataRequestPair.create(sampleJSONbody);
+
+> **Now creating the request**
+
+     DataRequest request = DataRequest.getInstance()
                     .addHeaders(new String[]{"your_header_key"}, new String[]{"your_header_value"});
-    
             // replace this with your domain to test
             request.addUrl("https://www.yourdomain.com");
             request.addDataRequestPair(requestPair);
             request.addMethod(Method.POST);
-            DataRequestManager<String> requestManager = DataRequestManager.getInstance(getApplicationContext(), String.class);
-            requestManager.addRequestBody(request).addOnDataReciveListner(new OnDataRecievedListener() {
+for GET
+
+    request.addMethod(Method.GET);
+
+Similarly for other request aswell.
+
+Others supported function
+
+    request.addMinimumServerCallTimeDifference(2000);
+This will add the minimum server call time so that server will be called after 2 seconds only after the first call.
+
+**Finally**
+Execute the request
+
+     DataRequestManager<String> requestManager = DataRequestManager.getInstance(getApplicationContext(), String.class);
+            requestManager.addRequestBody(request).addOnDataRecieveListner(new OnDataRecievedListener() {
                 @Override
                 public void onDataRecieved(Response response, Object object) {
                     Log.d("test", " data from server = " + object.toString());
-                    Assert.assertEquals(response.getMessage(), expected, response);
+                }
+            }, new OnDataRecievedProgressListener() {
+                @Override
+                public void onDataRecievedProgress(int completedPercentage) {
+                    Log.d("MainActivity", "Progress = " + completedPercentage);
                 }
             });
             requestManager.getData();
+
+> Currently OnDataRecieveProgressListener interface only works in GET request.
+
+Data Recieved as Object. The recieved object depends on the parameters send while creating the instance of the DataRequestManager. For eg
+
+
+    DataRequestManager<Profile> requestManager = DataRequestManager.getInstance(getApplicationContext(),
+                    Profile.class);
+This will gives the instance of Profile in OnDataRecieveListener CallBack.
+
+     requestManager.addRequestBody(request).addOnDataRecieveListner(new OnDataRecievedListener() {
+                @Override
+                public void onDataRecieved(Response response, Object object) {
+                    // since the json Array is recieved from the get Request this library gives the list of the class passed as parameter
+                    // here Profile is passed hence the object will be the list of profile.
+                    // if it is jsonobject it will give the pofile object
+                    if (response == Response.OK) {
+                        Log.d("MainActivity", "data = " + object.toString());
+                        List<Profile> profileList = (List<Profile>) object;
+                        Log.d("MainActivity", "list size = " + profileList.size());
+                    } else {
+                        Log.d("MainActivity", "response = " + response.getMessage());
+                    }
+                }
+            });
+            requestManager.getData();
+
+If the response from the RestAPI is JSONArray then it will return the List of that object and instance of the object for the JSONObject.
+
+**Example**
+Lets take the Sample API, This will give the JSONObject.
+http://github.yubrajpoudel.com.np/others/sample1.json
+
+Create Profile Class "Profile.java"
+
+    public class Profile {
+        public String name, address, profession;
+
+        public Profile(JSONObject jsonObject) {
+            this.name = jsonObject.optString("name");
+            this.address = jsonObject.optString("address");
+            this.profession = jsonObject.optString("profession");
         }
+        public Profile(){
+
+        }
+    }
+> Please put the empty constructor in the Model class otherwise it will throw error.
+Now Doing Request, we will obtain the data from server as the object of Profile
+
+    // this is optional, mulitple header can be passed by keeping it in array
+    DataRequest request = DataRequest.getInstance();
+    // request.addHeaders(new String[]{"your_header_key"}, new String[]{"your_header_value"});
+    request.addUrl("http://github.yubrajpoudel.com.np/others/sample2.json");
+    request.addMethod(Method.GET);
+    DataRequestManager<Profile> requestManager = DataRequestManager.getInstance(getApplicationContext(),
+            Profile.class);
+    requestManager.addRequestBody(request).addOnDataRecieveListner(new OnDataRecievedListener() {
+        @Override
+        public void onDataRecieved(Response response, Object object) {
+            // since the json Array is recieved from the get Request this library gives the list of the class passed as parameter
+            // here Profile is passed hence the object will be the list of profile.
+            // if it is jsonobject it will give the pofile object
+            if (response == Response.OK) {
+                Profile profile = (Profile) object;
+                Log.d("MainActivity", "Profile name = " + profile.name + " address = " + profile.address + " profession = " + profile.profession);
+            } else {
+                Log.d("MainActivity", "response = " + response.getMessage());
+            }
+        }
+    }, new OnDataRecievedProgressListener() {
+        @Override
+        public void onDataRecievedProgress(int completedPercentage) {
+            Log.d("MainActiivity", "completedPercentage = " + completedPercentage);
+        }
+    });
+    requestManager.getData();
 
 Yeah Thats all.
 For more information please see out the sample and for any queries or suggestion mail me at "yubaraj@mantraideas.com". 

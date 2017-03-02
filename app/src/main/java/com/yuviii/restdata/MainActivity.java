@@ -13,10 +13,6 @@ import com.mantraideas.simplehttp.datamanager.dmmodel.Method;
 import com.mantraideas.simplehttp.datamanager.dmmodel.Response;
 
 import junit.framework.Assert;
-
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.List;
 
 
@@ -74,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         request.addUrl("https://www.yourdomain.com");
         request.addDataRequestPair(requestPair);
         request.addMethod(Method.POST);
+        request.addMinimumServerCallTimeDifference(2000);
         DataRequestManager<String> requestManager = DataRequestManager.getInstance(getApplicationContext(), String.class);
         requestManager.addRequestBody(request).addOnDataRecieveListner(new OnDataRecievedListener() {
             @Override
@@ -146,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         request.addUrl("http://github.yubrajpoudel.com.np/others/sample1.json");
         request.addMethod(Method.GET);
         DataRequestManager<Profile> requestManager = DataRequestManager.getInstance(getApplicationContext(),
-                String.class);
+                Profile.class);
         requestManager.addRequestBody(request).addOnDataRecieveListner(new OnDataRecievedListener() {
             @Override
             public void onDataRecieved(Response response, Object object) {
@@ -169,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
         });
         requestManager.getData();
     }
+
     public void doGetMethodOfRestAPIForJSONObject() {
         Log.d("test", "started checking get test");
         // this is optional, mulitple header can be passed by keeping it in array
@@ -190,6 +188,11 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Log.d("MainActivity", "response = " + response.getMessage());
                 }
+            }
+        }, new OnDataRecievedProgressListener() {
+            @Override
+            public void onDataRecievedProgress(int completedPercentage) {
+                Log.d("MainActiivity", "completedPercentage = " + completedPercentage);
             }
         });
         requestManager.getData();
