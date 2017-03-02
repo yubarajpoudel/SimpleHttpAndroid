@@ -81,25 +81,35 @@ public class ServerRequestHandler {
 
     public String post() {
         String responseFromServer = "";
+        DataOutputStream outputStreamWriter = null;
         try {
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Accept-Encoding", "identity");
             conn.setDoOutput(true);
             conn.setDoInput(true);
-            OutputStream writer = conn.getOutputStream();
-            DmUtilities.trace("ServerRequestHandler, ConnectionStatus = " + conn.getResponseCode() + " Contains DataRequestPair = " + (request.getDataRequestPair() != null) + " byteLength = " + request.getDataRequestPair().toUrlEncodedData().length);
-            writer.write(request.getDataRequestPair() != null ? request.getDataRequestPair().toUrlEncodedData() : new byte[0]);
-            writer.flush();
-            writer.close();
+            outputStreamWriter = new DataOutputStream(conn.getOutputStream());
+            outputStreamWriter.write(request.getDataRequestPair() != null ? request.getDataRequestPair().toUrlEncodedData() : new byte[0]);
             responseFromServer = DmUtilities.convertStreamToString(conn.getInputStream());
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }  finally {
+            if (outputStreamWriter != null) {
+                try {
+                    outputStreamWriter.flush();
+                    outputStreamWriter.close();
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
+            }
+            if (conn != null) {
+                conn.disconnect();
+            }
         }
-
         return responseFromServer;
     }
 
     public String delete(){
+        DataOutputStream outputStreamWriter = null;
         String responseFromServer = "";
         try {
             conn.setRequestMethod("DELETE");
@@ -109,11 +119,23 @@ public class ServerRequestHandler {
             OutputStream writer = conn.getOutputStream();
             DmUtilities.trace("ServerRequestHandler, ConnectionStatus = " + conn.getResponseCode() + " Contains DataRequestPair = " + (request.getDataRequestPair() != null) + " byteLength = " + request.getDataRequestPair().toUrlEncodedData().length);
             writer.write(request.getDataRequestPair() != null ? request.getDataRequestPair().toUrlEncodedData() : new byte[0]);
-            writer.flush();
-            writer.close();
+            outputStreamWriter = new DataOutputStream(conn.getOutputStream());
+            outputStreamWriter.write(request.getDataRequestPair() != null ? request.getDataRequestPair().toUrlEncodedData() : new byte[0]);
             responseFromServer = DmUtilities.convertStreamToString(conn.getInputStream());
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }  finally {
+            if (outputStreamWriter != null) {
+                try {
+                    outputStreamWriter.flush();
+                    outputStreamWriter.close();
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
+            }
+            if (conn != null) {
+                conn.disconnect();
+            }
         }
         return responseFromServer;
     }
