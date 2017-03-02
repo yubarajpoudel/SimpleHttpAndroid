@@ -1,4 +1,4 @@
-package com.yuviii.restdata;
+package com.yuviii.restdata.testing;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +12,7 @@ import com.mantraideas.simplehttp.datamanager.dmmodel.DataRequest;
 import com.mantraideas.simplehttp.datamanager.dmmodel.DataRequestPair;
 import com.mantraideas.simplehttp.datamanager.dmmodel.Method;
 import com.mantraideas.simplehttp.datamanager.dmmodel.Response;
+import com.yuviii.restdata.R;
 
 import junit.framework.Assert;
 

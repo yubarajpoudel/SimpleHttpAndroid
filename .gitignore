@@ -7,4 +7,5 @@
 /build
 /captures
 .externalNativeBuild
-/app/src/main/com/yuviii/restdata/TestActivity
+/app/src/main/java/com/yuviii/restdata/testing
+
