@@ -116,9 +116,6 @@ public class ServerRequestHandler {
             conn.setRequestProperty("Accept-Encoding", "identity");
             conn.setDoOutput(true);
             conn.setDoInput(true);
-            OutputStream writer = conn.getOutputStream();
-            DmUtilities.trace("ServerRequestHandler, ConnectionStatus = " + conn.getResponseCode() + " Contains DataRequestPair = " + (request.getDataRequestPair() != null));
-            writer.write(request.getDataRequestPair() != null ? request.getDataRequestPair().toUrlEncodedData() : new byte[0]);
             outputStreamWriter = new DataOutputStream(conn.getOutputStream());
             outputStreamWriter.write(request.getDataRequestPair() != null ? request.getDataRequestPair().toUrlEncodedData() : new byte[0]);
             responseFromServer = DmUtilities.convertStreamToString(conn.getInputStream());

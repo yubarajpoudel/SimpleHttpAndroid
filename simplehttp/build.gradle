@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/yuviii/SimpleHttpAndroid'
     gitUrl = 'https://github.com/yuviii/SimpleHttpAndroid.git'
 
-    libraryVersion = '1.0.5'
+    libraryVersion = '1.0.6'
 
     developerId = 'yuviii'
     developerName = 'Yubaraj Poudel'
@@ -31,8 +31,8 @@ android {
     defaultConfig {
         minSdkVersion 10
         targetSdkVersion 25
-        versionCode 6
-        versionName "1.5"
+        versionCode 7
+        versionName "1.6"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

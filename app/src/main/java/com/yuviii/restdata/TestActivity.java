@@ -26,6 +26,7 @@ public class TestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         testPostMethod();
+        testDeleteMethod();
     }
 
     private void testPostMethod() {
@@ -63,6 +64,28 @@ public class TestActivity extends AppCompatActivity {
             public void onDataRecieved(Response response, Object object) {
                 Log.d("test", " data from server = " + object.toString());
                 Assert.assertEquals(response.getMessage(), expected, response);
+            }
+        }, new OnDataRecievedProgressListener() {
+            @Override
+            public void onDataRecievedProgress(int completedPercentage) {
+                Log.d("MainActivity", "Progress = " + completedPercentage);
+            }
+        });
+        requestManager.getData();
+    }
+
+    private void testDeleteMethod(){
+        DataRequest request = DataRequest.getInstance()
+                .addHeaders(new String[]{"Authorization"}, new String[]{"Bearer a304fd213c730859fa96b25635bea1b2866895c4"});
+
+        // replace this with your domain to test
+        request.addUrl("https://www.gorakhadepartmentstores.com/api/rest/cart/empty");
+        request.addMethod(Method.DELETE);
+        DataRequestManager<String> requestManager = DataRequestManager.getInstance(getApplicationContext(), String.class);
+        requestManager.addRequestBody(request).addOnDataRecieveListner(new OnDataRecievedListener() {
+            @Override
+            public void onDataRecieved(Response response, Object object) {
+                Log.d("test", " data from server = " + object.toString());
             }
         }, new OnDataRecievedProgressListener() {
             @Override
