@@ -1,5 +1,16 @@
 package com.yuviii.restdata;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.mantraideas.simplehttp.datamanager.DataRequestManager;
+import com.mantraideas.simplehttp.datamanager.OnDataRecievedListener;
+import com.mantraideas.simplehttp.datamanager.dmmodel.DataRequest;
+import com.mantraideas.simplehttp.datamanager.dmmodel.DataRequestPair;
+import com.mantraideas.simplehttp.datamanager.dmmodel.Method;
+import com.mantraideas.simplehttp.datamanager.dmmodel.Response;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -14,4 +25,5 @@ public class ExampleUnitTest {
     public void addition_isCorrect() throws Exception {
         assertEquals(4, 2 + 2);
     }
+
 }

@@ -73,7 +73,7 @@ public class DataRequestManager<T extends Object> {
         return this;
     }
 
-    public void getData() {
+    public void sync() {
         // first check internet connection
         // check the request is null or not
         // check the flag force is on or off
@@ -114,22 +114,23 @@ public class DataRequestManager<T extends Object> {
             if(request.getMethod() == null){
                 throw new DataManagerException("Please provide the valid method for eg GET, POST, PUT or DELETE");
             }
-            if(!request.getMethod().equals("GET") && progressListener != null){
-                Log.d("SimpleHttp", "Currently OnDataRecieved Progress listener is available only in the GET request method. for more queries please contact to author");
-            }
-            if (request.getMethod() == Method.GET) {
-                return serverRequestHandler.get();
-            }
-            else if(request.getMethod() == Method.PUT) {
-                return serverRequestHandler.put();
-            }
-            else if(request.getMethod() == Method.POST){
-                return serverRequestHandler.post();
-            }
-            else if(request.getMethod() == Method.DELETE) {
-                return serverRequestHandler.delete();
-            }
-            else {
+            try {
+                if (!request.getMethod().equals("GET") && progressListener != null) {
+                    Log.d("SimpleHttp", "Currently OnDataRecieved Progress listener is available only in the GET request method. for more queries please contact to author");
+                }
+                if (request.getMethod() == Method.GET) {
+                    return serverRequestHandler.get();
+                } else if (request.getMethod() == Method.PUT) {
+                    return serverRequestHandler.put();
+                } else if (request.getMethod() == Method.POST) {
+                    return serverRequestHandler.post();
+                } else if (request.getMethod() == Method.DELETE) {
+                    return serverRequestHandler.delete();
+                } else {
+                    return "{}";
+                }
+            }catch (DataManagerException e){
+                e.printStackTrace();
                 return "{}";
             }
         }

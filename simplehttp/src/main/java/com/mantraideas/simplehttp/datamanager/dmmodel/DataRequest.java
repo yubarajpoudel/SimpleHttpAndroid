@@ -12,6 +12,7 @@ public class DataRequest {
     private boolean force = false;
     private boolean saveForOffline = false;
     private String[] headerKeys = null, headerValues = null;
+    private int connectionTime = 10000;
 
     public String getUrl() {
         return url;
@@ -70,6 +71,15 @@ public class DataRequest {
         return this;
     }
 
+    /**
+     *
+     * @param connectionTime in milliseconds
+     * @return
+     */
+    public DataRequest setServerConnectionTime(int connectionTime){
+        this.connectionTime = connectionTime;
+        return this;
+    }
     public DataRequest addHeaders(String[] headerKeys, String[] headerValues) {
         this.headerKeys = headerKeys;
         this.headerValues = headerValues;
@@ -79,6 +89,10 @@ public class DataRequest {
     public boolean hasValidHeaders() {
         return (headerKeys != null && headerValues != null)
                 && headerKeys.length > 0 && (headerKeys.length == headerValues.length);
+    }
+
+    public int getConnectionTime(){
+        return this.connectionTime;
     }
 
     public String[] getHeaderKeys() {

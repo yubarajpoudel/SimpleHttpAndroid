@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("MainActivity", "Progress = " + completedPercentage);
             }
         });
-        requestManager.getData();
+        requestManager.sync();
     }
 
     public void doPostMethodOfRestAPIWithFormData() {
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("MainActivity", "Progress = " + completedPercentage);
             }
         });
-        requestManager.getData();
+        requestManager.sync();
     }
 
     public void testDELETEMethod(){
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("MainActivity", "Response = " + response.getMessage() + " , data From Server = " + object.toString());
             }
         });
-        requestManager.getData();
+        requestManager.sync();
     }
 
     public void doGetMethodOfRestAPIForJSONArray() {
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("MainActivity", " progress = " + completedPercentage);
             }
         });
-        requestManager.getData();
+        requestManager.sync();
     }
 
     public void doGetMethodOfRestAPIForJSONObject() {
@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("MainActiivity", "completedPercentage = " + completedPercentage);
             }
         });
-        requestManager.getData();
+        requestManager.sync();
     }
 
 }

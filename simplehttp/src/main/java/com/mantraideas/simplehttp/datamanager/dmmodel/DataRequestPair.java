@@ -1,6 +1,8 @@
 package com.mantraideas.simplehttp.datamanager.dmmodel;
 
 
+import android.text.TextUtils;
+
 import com.mantraideas.simplehttp.datamanager.error.DataManagerException;
 import com.mantraideas.simplehttp.datamanager.util.DmUtilities;
 
@@ -75,19 +77,20 @@ public class DataRequestPair {
                 e.printStackTrace();
             }
         } else if (type == TYPE.PAIR && list != null) {
-
             StringBuilder result = new StringBuilder();
             boolean first = true;
                 try {
                     for (DataRequestPair data : list) {
-                        if (first) {
-                            first = false;
-                        } else {
-                            result.append("&");
+                        if (!TextUtils.isEmpty(data.key) && !TextUtils.isEmpty(data.value)){
+                            if (first) {
+                                first = false;
+                            } else {
+                                result.append("&");
+                            }
+                            result.append(URLEncoder.encode(data.key, "UTF-8"));
+                            result.append("=");
+                            result.append(URLEncoder.encode(data.value, "UTF-8"));
                         }
-                        result.append(URLEncoder.encode(data.key, "UTF-8"));
-                        result.append("=");
-                        result.append(URLEncoder.encode(data.value, "UTF-8"));
                     }
                     byte[] bytes = result.toString().getBytes();
                     return bytes;

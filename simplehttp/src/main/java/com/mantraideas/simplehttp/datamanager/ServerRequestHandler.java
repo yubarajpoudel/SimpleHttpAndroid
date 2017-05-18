@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 
 public class ServerRequestHandler {
@@ -31,13 +32,14 @@ public class ServerRequestHandler {
             if (!TextUtils.isEmpty(request.getUrl())) {
                 this.mUrl = new URL(request.getUrl());
                 this.conn = (HttpURLConnection) mUrl.openConnection();
+                this.conn.setConnectTimeout(request.getConnectionTime());
                 if (request.hasValidHeaders()) {
                     addHeaderifExists(request);
                 } else {
                     DmUtilities.trace("ServerRequestHandler, Headers is either empty or not valid");
                 }
             } else {
-                throw new DataManagerException("Url cannot be null");
+                throw new DataManagerException("Url cannot be null or empty");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -69,7 +71,14 @@ public class ServerRequestHandler {
                 }
             }
             responseFromServer = DmUtilities.convertStreamToString(conn.getInputStream());
-        } catch (Exception e) {
+        }catch (SocketTimeoutException e){
+            e.printStackTrace();
+            throw new DataManagerException("ServerTimeout exception");
+        }catch (IOException e){
+            e.printStackTrace();
+            throw new DataManagerException("Invalid url request");
+        }
+        catch (Exception e) {
             e.printStackTrace();
             throw new DataManagerException("error occured in connection");
         }finally {
@@ -90,9 +99,17 @@ public class ServerRequestHandler {
             outputStreamWriter = new DataOutputStream(conn.getOutputStream());
             outputStreamWriter.write(request.getDataRequestPair() != null ? request.getDataRequestPair().toUrlEncodedData() : new byte[0]);
             responseFromServer = DmUtilities.convertStreamToString(conn.getInputStream());
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }  finally {
+        } catch (SocketTimeoutException e){
+            e.printStackTrace();
+            throw new DataManagerException("ServerTimeout exception");
+        }catch (IOException e){
+            e.printStackTrace();
+            throw new DataManagerException("Invalid url request");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw new DataManagerException("error occured in connection");
+        } finally {
             if (outputStreamWriter != null) {
                 try {
                     outputStreamWriter.flush();
@@ -119,8 +136,16 @@ public class ServerRequestHandler {
             outputStreamWriter = new DataOutputStream(conn.getOutputStream());
             outputStreamWriter.write(request.getDataRequestPair() != null ? request.getDataRequestPair().toUrlEncodedData() : new byte[0]);
             responseFromServer = DmUtilities.convertStreamToString(conn.getInputStream());
-        } catch (IOException exception) {
-            exception.printStackTrace();
+        }catch (SocketTimeoutException e){
+            e.printStackTrace();
+            throw new DataManagerException("ServerTimeout exception");
+        }catch (IOException e){
+            e.printStackTrace();
+            throw new DataManagerException("Invalid url request");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw new DataManagerException("error occured in connection");
         }  finally {
             if (outputStreamWriter != null) {
                 try {
@@ -149,9 +174,17 @@ public class ServerRequestHandler {
             outputStreamWriter = new DataOutputStream(conn.getOutputStream());
             outputStreamWriter.write(request.getDataRequestPair() != null ? request.getDataRequestPair().toUrlEncodedData() : new byte[0]);
             responseFromServer = DmUtilities.convertStreamToString(conn.getInputStream());
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }  finally {
+        }catch (SocketTimeoutException e){
+            e.printStackTrace();
+            throw new DataManagerException("ServerTimeout exception");
+        }catch (IOException e){
+            e.printStackTrace();
+            throw new DataManagerException("Invalid url request");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw new DataManagerException("error occured in connection");
+        } finally {
             if (outputStreamWriter != null) {
                 try {
                     outputStreamWriter.flush();
