@@ -22,10 +22,11 @@ Gradle
 **ProGuard**
 
 If you are using ProGuard you might need to add the following option:
-> -keep class com.mantraideas.simplehttp.datamanager.** {*;}
-> -keep class com.mantraideas.simplehttp.datamanager.DataRequestManager {*;}
-> -dontwarn com.mantraideas.simplehttp.datamanager.**
-> -dontwarn com.mantraideas.simplehttp.datamanager.DataRequestManager
+
+    -keep class com.mantraideas.simplehttp.datamanager.** {*;}
+    -keep class com.mantraideas.simplehttp.datamanager.DataRequestManager {*;}
+    -dontwarn com.mantraideas.simplehttp.datamanager.**
+    -dontwarn com.mantraideas.simplehttp.datamanager.DataRequestManager 
 
 **Support**
 > Currently it supports the GET, POST, PUT and DELETE request method
