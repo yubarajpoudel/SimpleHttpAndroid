@@ -37,129 +37,89 @@ public class ExampleInstrumentedTest {
         assertEquals("com.mantraideas.simplehttp.test", appContext.getPackageName());
     }
 
-//    @Test
-//    public void checkPostMethodOfRestApiWithJSONBody() {
-//        final Response expected = Response.OK;
-//        String samplebody = "{\n" +
-//                "\t\"address_1\": \"Test street 88\",\n" +
-//                "\t\"address_2\": \"test\",\n" +
-//                "\t\"city\": \"Berlin\",\n" +
-//                "\t\"company_id\": \"company\",\n" +
-//                "\t\"company\": \"company\",\n" +
-//                "\t\"country_id\": \"97\",\n" +
-//                "\t\"email\": \"test@test.com\",\n" +
-//                "\t\"fax\": \"1\",\n" +
-//                "\t\"firstname\": \"Test\",\n" +
-//                "\t\"lastname\": \"User\",\n" +
-//                "\t\"postcode\": \"1111\",\n" +
-//                "\t\"tax_id\": \"1\",\n" +
-//                "\t\"telephone\": \"+36306668884\",\n" +
-//                "\t\"zone_id\": \"1433\",\n" +
-//                "\t\"password\": \"12345\",\n" +
-//                "\t\"confirm\": \"12345\",\n" +
-//                "\t\"agree\": \"1\"\n" +
-//                "}";
-//        DataRequestPair requestPair = DataRequestPair.create(samplebody);
-//        DataRequest request = DataRequest.getInstance()
-//                .addHeaders(new String[]{"your_header_key"}, new String[]{"your_header_value"});
-//
-//        // replace this with your domain to test
-//        request.addUrl("https://www.yourdomain.com");
-//        request.addDataRequestPair(requestPair);
-//        request.addMethod(Method.POST);
-//        DataRequestManager<String> requestManager = DataRequestManager.getInstance(InstrumentationRegistry.getTargetContext(), String.class);
-//        requestManager.addRequestBody(request).addOnDataRecieveListner(new OnDataRecievedListener() {
-//            @Override
-//            public void onDataRecieved(Response response, Object object) {
-//                Log.d("test", " data from server = " + object.toString());
-//                Assert.assertEquals(response.getMessage(), expected, response);
-//            }
-//        });
-//        requestManager.sync();
-//    }
-//
-//    @Test
-//    public void checkPostMethodOfRestAPIWithFormData() {
-//        final Response expected = Response.OK;
-//        DataRequestPair requestPair = DataRequestPair.create();
-//        requestPair.put("password", "12345");
-//        requestPair.put("email", "test@tests.com");
-//
-//        // mulitple header can be passed by keeping it in array
-//        DataRequest request = DataRequest.getInstance().addHeaders(new String[]{"your_header_key"}, new String[]{"your_header_value"});
-//        request.addUrl("https://www.yourdomain.com/api/rest/login");
-//        request.addDataRequestPair(requestPair);
-//        request.addMethod(Method.POST);
-//        DataRequestManager<String> requestManager = DataRequestManager.getInstance(InstrumentationRegistry.getTargetContext(), String.class);
-//        requestManager.addRequestBody(request).addOnDataRecieveListner(new OnDataRecievedListener() {
-//            @Override
-//            public void onDataRecieved(Response response, Object object) {
-//                Log.d("test", " data from server = " + object.toString());
-//                Assert.assertEquals(response.getMessage(), expected, response);
-//            }
-//        });
-//        requestManager.sync();
-//    }
-//
-//    @Test
-//    public void checkGetMethodOfRestAPI() {
-//        final Response expected = Response.OK;
-//        Log.d("test", "started checking get test");
-//        // mulitple header can be passed by keeping it in array
-//        DataRequest request = DataRequest.getInstance().addHeaders(new String[]{"your_header_key"}, new String[]{"your_header_value"});
-//        request.addUrl("https://www.yourdomain.com");
-//        request.addMethod(Method.GET);
-//        DataRequestManager<String> requestManager = DataRequestManager.getInstance(InstrumentationRegistry.getTargetContext(), String.class);
-//        requestManager.addRequestBody(request).addOnDataRecieveListner(new OnDataRecievedListener() {
-//            @Override
-//            public void onDataRecieved(Response response, Object object) {
-//                Log.d("test", " data from server = " + object.toString());
-//                Assert.assertEquals(response.getMessage(), expected, response.OK);
-//
-//            }
-//        });
-//        requestManager.sync();
-//    }
-
     @Test
-    public void checkPostRequestAPI(){
-        DataRequestPair requestPair = DataRequestPair.create();
-        requestPair.put("action", "get_video");
-        requestPair.put("id", "29102");
-        requestPair.put("sample", null);
+    public void checkPostMethodOfRestApiWithJSONBody() {
+        final Response expected = Response.OK;
+        String samplebody = "{\n" +
+                "\t\"address_1\": \"Test street 88\",\n" +
+                "\t\"address_2\": \"test\",\n" +
+                "\t\"city\": \"Berlin\",\n" +
+                "\t\"company_id\": \"company\",\n" +
+                "\t\"company\": \"company\",\n" +
+                "\t\"country_id\": \"97\",\n" +
+                "\t\"email\": \"test@test.com\",\n" +
+                "\t\"fax\": \"1\",\n" +
+                "\t\"firstname\": \"Test\",\n" +
+                "\t\"lastname\": \"User\",\n" +
+                "\t\"postcode\": \"1111\",\n" +
+                "\t\"tax_id\": \"1\",\n" +
+                "\t\"telephone\": \"+36306668884\",\n" +
+                "\t\"zone_id\": \"1433\",\n" +
+                "\t\"password\": \"12345\",\n" +
+                "\t\"confirm\": \"12345\",\n" +
+                "\t\"agree\": \"1\"\n" +
+                "}";
+        DataRequestPair requestPair = DataRequestPair.create(samplebody);
+        DataRequest request = DataRequest.getInstance()
+                .addHeaders(new String[]{"your_header_key"}, new String[]{"your_header_value"});
 
-        DataRequest request = DataRequest.getInstance();
-        request.addUrl("http://videosanjal.com/apis/v4/");
+        // replace this with your domain to test
+        request.addUrl("https://www.yourdomain.com");
         request.addDataRequestPair(requestPair);
         request.addMethod(Method.POST);
-
         DataRequestManager<String> requestManager = DataRequestManager.getInstance(InstrumentationRegistry.getTargetContext(), String.class);
         requestManager.addRequestBody(request).addOnDataRecieveListner(new OnDataRecievedListener() {
             @Override
             public void onDataRecieved(Response response, Object object) {
-                Log.d("test", " data from server = " + object.toString() + "responseFromServer :: " + response.getMessage());
-               // Assert.assertEquals(response.getMessage(), expected, response.OK);
-
+                Log.d("test", " data from server = " + object.toString());
+                Assert.assertEquals(response.getMessage(), expected, response);
             }
         });
         requestManager.sync();
     }
 
     @Test
-    public void checkGetRequestAPI(){
-        DataRequest request = DataRequest.getInstance();
-        request.addUrl(  "http://github.yubrajpoudel.com.np/others/sample1.json");
-        request.addMethod(Method.POST);
+    public void checkPostMethodOfRestAPIWithFormData() {
+        final Response expected = Response.OK;
+        DataRequestPair requestPair = DataRequestPair.create();
+        requestPair.put("password", "12345");
+        requestPair.put("email", "test@tests.com");
 
+        // mulitple header can be passed by keeping it in array
+        DataRequest request = DataRequest.getInstance().addHeaders(new String[]{"your_header_key"}, new String[]{"your_header_value"});
+        request.addUrl("https://www.yourdomain.com/api/rest/login");
+        request.addDataRequestPair(requestPair);
+        request.addMethod(Method.POST);
         DataRequestManager<String> requestManager = DataRequestManager.getInstance(InstrumentationRegistry.getTargetContext(), String.class);
         requestManager.addRequestBody(request).addOnDataRecieveListner(new OnDataRecievedListener() {
             @Override
             public void onDataRecieved(Response response, Object object) {
-                Log.d("test", " data from server = " + object.toString() + " ResponseFromServer :: " + response.getMessage());
-                // Assert.assertEquals(response.getMessage(), expected, response.OK);
+                Log.d("test", " data from server = " + object.toString());
+                Assert.assertEquals(response.getMessage(), expected, response);
+            }
+        });
+        requestManager.sync();
+    }
+
+    @Test
+    public void checkGetMethodOfRestAPI() {
+        final Response expected = Response.OK;
+        Log.d("test", "started checking get test");
+        // mulitple header can be passed by keeping it in array
+        DataRequest request = DataRequest.getInstance().addHeaders(new String[]{"your_header_key"}, new String[]{"your_header_value"});
+        request.addUrl("https://www.yourdomain.com");
+        request.addMethod(Method.GET);
+        DataRequestManager<String> requestManager = DataRequestManager.getInstance(InstrumentationRegistry.getTargetContext(), String.class);
+        requestManager.addRequestBody(request).addOnDataRecieveListner(new OnDataRecievedListener() {
+            @Override
+            public void onDataRecieved(Response response, Object object) {
+                Log.d("test", " data from server = " + object.toString());
+                Assert.assertEquals(response.getMessage(), expected, response.OK);
 
             }
         });
         requestManager.sync();
     }
+
+
 }
