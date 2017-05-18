@@ -11,18 +11,21 @@ Maven
     <dependency>
       <groupId>com.mantraideas.simplehttp</groupId>
       <artifactId>simplehttp</artifactId>
-      <version>1.0.6</version>
+      <version>1.0.7</version>
       <type>pom</type>
     </dependency>
 
 Gradle
 
-    compile 'com.mantraideas.simplehttp:simplehttp:1.0.6'
+    compile 'com.mantraideas.simplehttp:simplehttp:1.0.7'
 
 **ProGuard**
 
 If you are using ProGuard you might need to add the following option:
-> -dontwarn com.mantraideas.simplehttp.datamanager.**
+> -keep class com.mantraideas.simplehttp.datamanager.** {*;}
+  -keep class com.mantraideas.simplehttp.datamanager.DataRequestManager {*;}
+  -dontwarn com.mantraideas.simplehttp.datamanager.**
+  -dontwarn com.mantraideas.simplehttp.datamanager.DataRequestManager
 
 **Support**
 > Currently it supports the GET, POST, PUT and DELETE request method
@@ -92,7 +95,7 @@ Execute the request
                     Log.d("MainActivity", "Progress = " + completedPercentage);
                 }
             });
-            requestManager.getData();
+            requestManager.sync();
 
 > Currently OnDataRecieveProgressListener interface only works in GET request.
 
@@ -118,7 +121,7 @@ This will gives the instance of Profile in OnDataRecieveListener CallBack.
                     }
                 }
             });
-            requestManager.getData();
+            requestManager.sync();
 
 If the response from the RestAPI is JSONArray then it will return the List of that object and instance of the object for the JSONObject.
 
@@ -169,7 +172,7 @@ Now Doing Request, we will obtain the data from server as the object of Profile
             Log.d("MainActiivity", "completedPercentage = " + completedPercentage);
         }
     });
-    requestManager.getData();
+    requestManager.sync();
 
 Yeah Thats all.
 For more information please see out the sample and for any queries or suggestion mail me at "yubaraj@mantraideas.com". 
