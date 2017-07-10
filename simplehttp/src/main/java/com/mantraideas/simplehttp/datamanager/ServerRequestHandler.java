@@ -71,17 +71,16 @@ public class ServerRequestHandler {
                 }
             }
             responseFromServer = DmUtilities.convertStreamToString(conn.getInputStream());
-        }catch (SocketTimeoutException e){
+        } catch (SocketTimeoutException e) {
             e.printStackTrace();
             throw new DataManagerException("ServerTimeout exception");
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             throw new DataManagerException("Invalid url request");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new DataManagerException("error occured in connection");
-        }finally {
+        } finally {
             conn.disconnect();
         }
         return responseFromServer;
@@ -99,14 +98,13 @@ public class ServerRequestHandler {
             outputStreamWriter = new DataOutputStream(conn.getOutputStream());
             outputStreamWriter.write(request.getDataRequestPair() != null ? request.getDataRequestPair().toUrlEncodedData() : new byte[0]);
             responseFromServer = DmUtilities.convertStreamToString(conn.getInputStream());
-        } catch (SocketTimeoutException e){
+        } catch (SocketTimeoutException e) {
             e.printStackTrace();
             throw new DataManagerException("ServerTimeout exception");
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             throw new DataManagerException("Invalid url request");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new DataManagerException("error occured in connection");
         } finally {
@@ -125,28 +123,30 @@ public class ServerRequestHandler {
         return responseFromServer;
     }
 
-    public String delete(){
+    public String delete() {
         DataOutputStream outputStreamWriter = null;
         String responseFromServer = "";
         try {
             conn.setRequestMethod("DELETE");
-            conn.setRequestProperty("Accept-Encoding", "identity");
-            conn.setDoOutput(true);
+            conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            conn.setUseCaches(false);
             conn.setDoInput(true);
-            outputStreamWriter = new DataOutputStream(conn.getOutputStream());
-            outputStreamWriter.write(request.getDataRequestPair() != null ? request.getDataRequestPair().toUrlEncodedData() : new byte[0]);
+            if (request.getDataRequestPair() != null) {
+                conn.setDoOutput(true);
+                outputStreamWriter = new DataOutputStream(conn.getOutputStream());
+                outputStreamWriter.write(request.getDataRequestPair().toUrlEncodedData());
+            }
             responseFromServer = DmUtilities.convertStreamToString(conn.getInputStream());
-        }catch (SocketTimeoutException e){
+        } catch (SocketTimeoutException e) {
             e.printStackTrace();
             throw new DataManagerException("ServerTimeout exception");
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             throw new DataManagerException("Invalid url request");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new DataManagerException("error occured in connection");
-        }  finally {
+        } finally {
             if (outputStreamWriter != null) {
                 try {
                     outputStreamWriter.flush();
@@ -163,7 +163,7 @@ public class ServerRequestHandler {
     }
 
 
-    public String put(){
+    public String put() {
         DataOutputStream outputStreamWriter = null;
         String responseFromServer = "";
         try {
@@ -174,14 +174,13 @@ public class ServerRequestHandler {
             outputStreamWriter = new DataOutputStream(conn.getOutputStream());
             outputStreamWriter.write(request.getDataRequestPair() != null ? request.getDataRequestPair().toUrlEncodedData() : new byte[0]);
             responseFromServer = DmUtilities.convertStreamToString(conn.getInputStream());
-        }catch (SocketTimeoutException e){
+        } catch (SocketTimeoutException e) {
             e.printStackTrace();
             throw new DataManagerException("ServerTimeout exception");
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             throw new DataManagerException("Invalid url request");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new DataManagerException("error occured in connection");
         } finally {

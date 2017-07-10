@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.mantraideas.simplehttp.datamanager.dmmodel.DataRequest;
@@ -138,6 +139,10 @@ public class DataRequestManager<T extends Object> {
         @Override
         protected void onPostExecute(String string) {
             super.onPostExecute(string);
+            if(TextUtils.equals(string, "{}")){
+                exitFromDataManager(Response.ERROR, "Server returning error, Please try again");
+                return;
+            }
             try {
                 Object json = new JSONTokener(string).nextValue();
                 boolean success = json instanceof JSONArray || json instanceof JSONObject;
