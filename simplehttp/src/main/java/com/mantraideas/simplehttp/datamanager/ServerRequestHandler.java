@@ -132,11 +132,20 @@ public class ServerRequestHandler {
             conn.setUseCaches(false);
             conn.setDoInput(true);
             if (request.getDataRequestPair() != null) {
-                conn.setDoOutput(true);
-                outputStreamWriter = new DataOutputStream(conn.getOutputStream());
-                outputStreamWriter.write(request.getDataRequestPair().toUrlEncodedData());
+//                conn.setDoOutput(true);
+//                outputStreamWriter = new DataOutputStream(conn.getOutputStream());
+//                outputStreamWriter.write(request.getDataRequestPair().toUrlEncodedData());
+//                outputStreamWriter.flush();
+                throw new DataManagerException("Delete method doesnot support writting in the body");
             }
-            responseFromServer = DmUtilities.convertStreamToString(conn.getInputStream());
+            int httpResult = conn.getResponseCode();
+            if (httpResult == HttpURLConnection.HTTP_OK) {
+                responseFromServer = DmUtilities.convertStreamToString(conn.getInputStream());
+                DmUtilities.trace("ServerRequestHandler, Delete :: successed");
+            } else {
+                responseFromServer = "{}";
+                DmUtilities.trace("ServerRequestHandler, Delete :: failed");
+            }
         } catch (SocketTimeoutException e) {
             e.printStackTrace();
             throw new DataManagerException("ServerTimeout exception");
