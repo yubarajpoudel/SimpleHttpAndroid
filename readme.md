@@ -11,13 +11,13 @@ Maven
     <dependency>
       <groupId>com.mantraideas.simplehttp</groupId>
       <artifactId>simplehttp</artifactId>
-      <version>1.0.9</version>
+      <version>2.0.0</version>
       <type>pom</type>
     </dependency>
 
 Gradle
 
-    compile 'com.mantraideas.simplehttp:simplehttp:1.0.9'
+    compile 'com.mantraideas.simplehttp:simplehttp:2.0.0'
 
 **ProGuard**
 

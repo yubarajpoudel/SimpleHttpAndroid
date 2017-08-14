@@ -112,7 +112,7 @@ public class DataRequestManager<T extends Object> {
         @Override
         protected String doInBackground(Void... voids) {
             serverRequestHandler = new ServerRequestHandler(request, progressListener);
-            if(request.getMethod() == null){
+            if (request.getMethod() == null) {
                 throw new DataManagerException("Please provide the valid method for eg GET, POST, PUT or DELETE");
             }
             try {
@@ -130,7 +130,7 @@ public class DataRequestManager<T extends Object> {
                 } else {
                     return "{}";
                 }
-            }catch (DataManagerException e){
+            } catch (DataManagerException e) {
                 e.printStackTrace();
                 return "{}";
             }
@@ -139,8 +139,14 @@ public class DataRequestManager<T extends Object> {
         @Override
         protected void onPostExecute(String string) {
             super.onPostExecute(string);
-            if(TextUtils.equals(string, "{}")){
+            if (TextUtils.equals(string, "{}")) {
                 exitFromDataManager(Response.ERROR, "Server returning error, Please try again");
+                Log.w("SimpleHttp", "unable to get the get data from inputStream");
+                return;
+            }
+            if (clazzz instanceof String) {
+                DmUtilities.trace("DataRequestManager, is String true");
+                exitFromDataManager(Response.OK, string);
                 return;
             }
             try {
@@ -148,10 +154,7 @@ public class DataRequestManager<T extends Object> {
                 boolean success = json instanceof JSONArray || json instanceof JSONObject;
                 DmUtilities.trace("DataRequestManager, request Successed = " + success);
                 if (success) {
-                    if (clazzz instanceof String) {
-                        DmUtilities.trace("DataRequestManager, is String true");
-                        exitFromDataManager(Response.OK, string);
-                    } else if (json instanceof JSONObject) {
+                    if (json instanceof JSONObject) {
                         Constructor<?> constructor = clazzz.getClass().getConstructor(JSONObject.class);
                         exitFromDataManager(Response.OK, constructor.newInstance(json));
                     } else if (json instanceof JSONArray) {

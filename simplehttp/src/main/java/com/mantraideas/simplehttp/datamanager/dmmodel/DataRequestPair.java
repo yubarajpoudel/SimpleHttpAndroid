@@ -58,8 +58,12 @@ public class DataRequestPair {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         try {
-            for (DataRequestPair data : list) {
-                builder.append("\"" + data.key + "\" = \"" + data.value + "\"");
+            if(type == TYPE.PAIR) {
+                for (DataRequestPair data : list) {
+                    builder.append("\"" + data.key + "\" = \"" + data.value + "\"");
+                }
+            }else if(type == TYPE.JSON) {
+                builder.append(jsonObject);
             }
         } catch (DataManagerException e) {
             e.printStackTrace();

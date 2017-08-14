@@ -9,6 +9,4 @@ import com.mantraideas.simplehttp.datamanager.dmmodel.Response;
 
 public interface OnDataRecievedListener {
     void onDataRecieved(Response response, Object object);
-
-
 }

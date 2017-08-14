@@ -1,6 +1,7 @@
 package com.mantraideas.simplehttp.datamanager;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.mantraideas.simplehttp.datamanager.dmmodel.DataRequest;
 import com.mantraideas.simplehttp.datamanager.dmmodel.Method;
@@ -211,7 +212,11 @@ public class ServerRequestHandler {
     private void addHeaderifExists(DataRequest request) {
         if (request.hasValidHeaders()) {
             for (int i = 0; i < request.getHeaderKeys().length; i++) {
-                conn.setRequestProperty(request.getHeaderKeys()[i], request.getHeaderValues()[i]);
+                if (!TextUtils.isEmpty(request.getHeaderKeys()[i]) && !TextUtils.isEmpty(request.getHeaderValues()[i])) {
+                    conn.setRequestProperty(request.getHeaderKeys()[i], request.getHeaderValues()[i]);
+                } else {
+                    Log.w("SimpleHttp", "Header key or value is empty");
+                }
             }
         }
     }
