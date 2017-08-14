@@ -74,7 +74,7 @@ public class DataRequest {
     /**
      *
      * @param connectionTime in milliseconds
-     * @return
+     * @return servercallTime
      */
     public DataRequest setServerConnectionTime(int connectionTime){
         this.connectionTime = connectionTime;
