@@ -2,14 +2,17 @@ package com.mantraideas.simplehttp.datamanager;
 
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Pair;
 
 import com.mantraideas.simplehttp.datamanager.dmmodel.DataRequest;
+import com.mantraideas.simplehttp.datamanager.dmmodel.FileMultiPart;
 import com.mantraideas.simplehttp.datamanager.dmmodel.Method;
 import com.mantraideas.simplehttp.datamanager.error.DataManagerException;
 import com.mantraideas.simplehttp.datamanager.util.DmUtilities;
 
 import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -17,6 +20,8 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ServerRequestHandler {
 
@@ -46,6 +51,33 @@ public class ServerRequestHandler {
             e.printStackTrace();
         }
     }
+
+    public String upLoad() {
+        FileMultiPart fileMultiPart = request.getFileMultiPart();
+        if (fileMultiPart == null) {
+            throw new DataManagerException("SimpleHttp :: fileMultipart cannot be null");
+        }
+        try {
+            FileUploader fileUploader = new FileUploader(conn, fileMultiPart.getCharset());
+            Pair<String, ArrayList<String>> filePart = fileMultiPart.getFilePart();
+            if (TextUtils.isEmpty(filePart.first) || filePart.second.size() == 0) {
+                Log.w("SimpleHttp", "FIleUploader :: file path to upload is not found");
+                return "{}";
+            }
+            for (int i = 0; i < filePart.second.size(); i++) {
+                fileUploader.addFilePart(filePart.first, new File(filePart.second.get(i)));
+            }
+            for (String key : fileMultiPart.getMapFormField().keySet()) {
+                fileUploader.addFormField(key, fileMultiPart.getMapFormField().get(key));
+            }
+            return fileUploader.finish();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "{}";
+        }
+    }
+
 
     public String get() {
         String responseFromServer = "";
@@ -133,10 +165,6 @@ public class ServerRequestHandler {
             conn.setUseCaches(false);
             conn.setDoInput(true);
             if (request.getDataRequestPair() != null) {
-//                conn.setDoOutput(true);
-//                outputStreamWriter = new DataOutputStream(conn.getOutputStream());
-//                outputStreamWriter.write(request.getDataRequestPair().toUrlEncodedData());
-//                outputStreamWriter.flush();
                 throw new DataManagerException("Delete method doesnot support writting in the body");
             }
             int httpResult = conn.getResponseCode();

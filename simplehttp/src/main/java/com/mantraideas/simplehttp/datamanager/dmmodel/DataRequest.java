@@ -1,5 +1,7 @@
 package com.mantraideas.simplehttp.datamanager.dmmodel;
 
+import java.io.File;
+
 /**
  * Created by yubraj on 1/27/17.
  */
@@ -13,6 +15,8 @@ public class DataRequest {
     private boolean saveForOffline = false;
     private String[] headerKeys = null, headerValues = null;
     private int connectionTime = 10000;
+    private FileMultiPart fileMultiPart = null;
+
 
     public String getUrl() {
         return url;
@@ -39,8 +43,17 @@ public class DataRequest {
     }
 
     private DataRequest() {
+
     }
 
+    public DataRequest addFileMultiPart(FileMultiPart multiPart) {
+        this.fileMultiPart = multiPart;
+        return this;
+    }
+
+    public FileMultiPart getFileMultiPart(){
+        return this.fileMultiPart;
+    }
 
     public static DataRequest getInstance() {
         return new DataRequest();
@@ -61,6 +74,7 @@ public class DataRequest {
         return this;
     }
 
+
     public DataRequest addMinimumServerCallTimeDifference(long minimumServerCallTimeDifference) {
         this.minimumServerCallTime = minimumServerCallTimeDifference;
         return this;
@@ -72,14 +86,14 @@ public class DataRequest {
     }
 
     /**
-     *
      * @param connectionTime in milliseconds
      * @return servercallTime
      */
-    public DataRequest setServerConnectionTime(int connectionTime){
+    public DataRequest setServerConnectionTime(int connectionTime) {
         this.connectionTime = connectionTime;
         return this;
     }
+
     public DataRequest addHeaders(String[] headerKeys, String[] headerValues) {
         this.headerKeys = headerKeys;
         this.headerValues = headerValues;
@@ -91,7 +105,7 @@ public class DataRequest {
                 && headerKeys.length > 0 && (headerKeys.length == headerValues.length);
     }
 
-    public int getConnectionTime(){
+    public int getConnectionTime() {
         return this.connectionTime;
     }
 

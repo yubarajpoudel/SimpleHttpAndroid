@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.mantraideas.simplehttp.datamanager.dmmodel.DataRequest;
+import com.mantraideas.simplehttp.datamanager.dmmodel.FileMultiPart;
 import com.mantraideas.simplehttp.datamanager.dmmodel.Method;
 import com.mantraideas.simplehttp.datamanager.dmmodel.Response;
 import com.mantraideas.simplehttp.datamanager.error.DataManagerException;
@@ -36,6 +37,7 @@ public class DataRequestManager<T extends Object> {
     private SharedPreferences preference;
     private OnDataRecievedListener recivedListener;
     private OnDataRecievedProgressListener progressListener;
+    private FileMultiPart fileMultiPart;
     T clazzz;
 
     private DataRequestManager(Context context, Class<?> mClass) {
@@ -112,27 +114,31 @@ public class DataRequestManager<T extends Object> {
         @Override
         protected String doInBackground(Void... voids) {
             serverRequestHandler = new ServerRequestHandler(request, progressListener);
-            if (request.getMethod() == null) {
-                throw new DataManagerException("Please provide the valid method for eg GET, POST, PUT or DELETE");
-            }
-            try {
-                if (!request.getMethod().equals("GET") && progressListener != null) {
-                    Log.d("SimpleHttp", "Currently OnDataRecieved Progress listener is available only in the GET request method. for more queries please contact to author");
+            if (request.getFileMultiPart() != null) {
+                return serverRequestHandler.upLoad();
+            } else {
+                if (request.getMethod() == null) {
+                    throw new DataManagerException("Please provide the valid method for eg GET, POST, PUT or DELETE");
                 }
-                if (request.getMethod() == Method.GET) {
-                    return serverRequestHandler.get();
-                } else if (request.getMethod() == Method.PUT) {
-                    return serverRequestHandler.put();
-                } else if (request.getMethod() == Method.POST) {
-                    return serverRequestHandler.post();
-                } else if (request.getMethod() == Method.DELETE) {
-                    return serverRequestHandler.delete();
-                } else {
+                try {
+                    if (!request.getMethod().equals("GET") && progressListener != null) {
+                        Log.d("SimpleHttp", "Currently OnDataRecieved Progress listener is available only in the GET request method. for more queries please contact to author");
+                    }
+                    if (request.getMethod() == Method.GET) {
+                        return serverRequestHandler.get();
+                    } else if (request.getMethod() == Method.PUT) {
+                        return serverRequestHandler.put();
+                    } else if (request.getMethod() == Method.POST) {
+                        return serverRequestHandler.post();
+                    } else if (request.getMethod() == Method.DELETE) {
+                        return serverRequestHandler.delete();
+                    } else {
+                        return "{}";
+                    }
+                } catch (DataManagerException e) {
+                    e.printStackTrace();
                     return "{}";
                 }
-            } catch (DataManagerException e) {
-                e.printStackTrace();
-                return "{}";
             }
         }
 
