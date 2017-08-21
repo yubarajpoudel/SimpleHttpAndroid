@@ -63,10 +63,9 @@ public class FileUploader {
     /**
      * Adds a upload file section to the request
      *
-     * @param fieldName  name attribute in <input type="file" name="..." />
      * @param uploadFile a File to be uploaded
-     * @throws IOException
      */
+
     public void addFilePart(String fieldName, File uploadFile)
             throws IOException {
         String fileName = uploadFile.getName();
