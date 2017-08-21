@@ -58,7 +58,7 @@ public class ServerRequestHandler {
             throw new DataManagerException("SimpleHttp :: fileMultipart cannot be null");
         }
         try {
-            FileUploader fileUploader = new FileUploader(conn, fileMultiPart.getCharset());
+            FileUploader fileUploader = new FileUploader(conn, fileMultiPart.getCharset(), listener);
             Pair<String, ArrayList<String>> filePart = fileMultiPart.getFilePart();
             if (TextUtils.isEmpty(filePart.first) || filePart.second.size() == 0) {
                 Log.w("SimpleHttp", "FIleUploader :: file path to upload is not found");

@@ -11,13 +11,13 @@ Maven
     <dependency>
       <groupId>com.mantraideas.simplehttp</groupId>
       <artifactId>simplehttp</artifactId>
-      <version>2.0.1</version>
+      <version>2.0.2</version>
       <type>pom</type>
     </dependency>
 
 Gradle
 
-    compile 'com.mantraideas.simplehttp:simplehttp:2.0.1'
+    compile 'com.mantraideas.simplehttp:simplehttp:2.0.2'
 
 **ProGuard**
 
@@ -26,7 +26,7 @@ If you are using ProGuard you might need to add the following option:
     -keep class com.mantraideas.simplehttp.datamanager.** {*;}
     -keep class com.mantraideas.simplehttp.datamanager.DataRequestManager {*;}
     -dontwarn com.mantraideas.simplehttp.datamanager.**
-    -dontwarn com.mantraideas.simplehttp.datamanager.DataRequestManager 
+    -dontwarn com.mantraideas.simplehttp.datamanager.DataRequestManager
 
 **Support**
 > Currently it supports the GET, POST, PUT and DELETE request method
@@ -174,6 +174,44 @@ Now Doing Request, we will obtain the data from server as the object of Profile
         }
     });
     requestManager.sync();
+
+Upload File to server
+
+     String charset = "UTF-8";
+        // uploading url -> url where you want to upload image
+        // https://abc.com/upload/...
+
+        String requestURL = "UPLOADING URL";
+
+        FileMultiPart fileMultiPart = FileMultiPart.instance();
+        fileMultiPart.setCharSet(charset);
+        fileMultiPart.addFile("file", selectedImagePath);
+        fileMultiPart.addFromField("description", "test");
+
+        Log.w("TestApiActivity", "filemultipart :: " + fileMultiPart.toString());
+
+        DataRequest request = DataRequest.getInstance();
+        request.addFileMultiPart(fileMultiPart);
+        request.addUrl(requestURL);
+
+        // optional if needed only
+        request.addHeaders(new String[]{"Authorization"}, new String[]{"Bearer YOUR_HEADER_KEY"});
+
+        DataRequestManager<String> requestManager = DataRequestManager.getInstance(getApplicationContext(), String.class).addRequestBody(request);
+        requestManager.addOnDataRecieveListner(new OnDataRecievedListener() {
+            @Override
+            public void onDataRecieved(Response response, Object object) {
+                Log.d("FromServer", "response = " + object.toString());
+            }
+        });
+        requestManager.sync();
+
+For uploading multipleFiles at same time
+
+       ArrayList<String> arrayList = new ArrayList<>();
+                    arrayList.add(selectedImagePath);
+                     fileMultiPart.addFile("file", arrayList);
+
 
 Yeah Thats all.
 For more information please see out the sample and for any queries or suggestion mail me at "yubaraj@mantraideas.com". 

@@ -1,8 +1,10 @@
 package com.yuviii.restdata;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import com.mantraideas.simplehttp.datamanager.DataRequestManager;
 import com.mantraideas.simplehttp.datamanager.OnDataRecievedListener;
@@ -13,8 +15,8 @@ import com.mantraideas.simplehttp.datamanager.dmmodel.Method;
 import com.mantraideas.simplehttp.datamanager.dmmodel.Response;
 
 import junit.framework.Assert;
-import java.util.List;
 
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -39,6 +41,13 @@ public class MainActivity extends AppCompatActivity {
 //         for delete method
         testDELETEMethod();
 //        testPutMethod();
+
+        findViewById(R.id.btn_uploadimage).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), UploadImageActivity.class));
+            }
+        });
     }
 
     public void doPostMethodOfRestApiWithJSONBody() {
@@ -119,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         requestManager.sync();
     }
 
-    public void testDELETEMethod(){
+    public void testDELETEMethod() {
         DataRequest request = DataRequest.getInstance();
         request.addUrl("https://www.yourdomain.com");
         // headers are optional
