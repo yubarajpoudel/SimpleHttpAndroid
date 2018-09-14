@@ -17,7 +17,7 @@ Maven
 
 Gradle
 
-    compile 'com.mantraideas.simplehttp:simplehttp:2.0.2'
+    implementation 'com.mantraideas.simplehttp:simplehttp:2.0.2'
 
 **ProGuard**
 
